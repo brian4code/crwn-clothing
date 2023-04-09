@@ -30,8 +30,10 @@ const SignUpForm = () => {
     }
 
     try {
+      // create user profile with email and password in firebase authentication
       const { user } = await createAuthUserWithEmailAndPassword(email, password)
 
+      // write user doc into collection in firestore 
       await createUserDocumentFromAuth(user, { displayName })
 
       resetFormFields()

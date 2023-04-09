@@ -3,7 +3,6 @@ import FormInput from "../form-input/form-input.component"
 import Button from "../button/button.component"
 
 import { 
-  createUserDocumentFromAuth,
   signInWithGooglePopup,
   signInAuthUserWithEmailAndPassword
 } from "../../utils/firebase/firebase.utils"
@@ -25,9 +24,7 @@ const SignInForm = () => {
 
   const signInWithGoogle = async () => {
     // Get firebase authentication for google sign in
-    const { user } = await signInWithGooglePopup()
-    // write user doc into collection in firestore 
-    await createUserDocumentFromAuth(user)
+    await signInWithGooglePopup()
   }
 
   const handleSubmit = async (event) => {
@@ -35,10 +32,7 @@ const SignInForm = () => {
 
     try {
       // sign in user profile with email and password in firebase authentication
-      const response = await signInAuthUserWithEmailAndPassword(email, password)
-      console.log(response)
-
-      // await createUserDocumentFromAuth(response.user)
+      await signInAuthUserWithEmailAndPassword(email, password)
 
       resetFormFields()
 

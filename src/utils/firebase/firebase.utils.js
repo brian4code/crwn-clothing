@@ -52,7 +52,7 @@ export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => 
   const collectionRef = collection(db, collectionKey)
   
   // to write a successful transaction (that contains multiple write to the db)
-  const batch = writeBatch()
+  const batch = writeBatch(db)
 
   objectsToAdd.forEach((object) => {
     const docRef = doc(collectionRef, object.title.toLowerCase())

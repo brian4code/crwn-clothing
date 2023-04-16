@@ -4,15 +4,15 @@ import Button, {BUTTON_TYPE_CLASSES} from "../button/button.component"
 
 import { 
   signInWithGooglePopup,
-  signInAuthUserWithEmailAndPassword
+  signInAuthUserWithEmailAndPassword,
 } from "../../utils/firebase/firebase.utils"
+
+import './sign-in-form.styles.scss'
 
 const defaultFormFields = {
   email: '',
   password: '',
 }
-
-import './sign-in-form.styles.scss'
 
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields)

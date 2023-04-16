@@ -33,11 +33,11 @@ const removeCartItem = (cartItems, cartItemToRemove) => {
   }
 
   // for quantity > 1, reduce the quantity
-  return cartItems.map((cartItem) => {
+  return cartItems.map((cartItem) => (
     cartItem.id === cartItemToRemove.id
       ? { ...cartItem, quantity: cartItem.quantity - 1 }
       : cartItem
-  })
+  ))
 }
 
 const clearCartItem = (cartItems, cartItemToClear) => {

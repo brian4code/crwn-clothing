@@ -1,18 +1,26 @@
-import './button.styles.scss'
+// CSS in JS styled components
+import {BaseButton, GoogleSignInButton, InvertedButton} from './button.styles'
 
-const BUTTON_TYPE_CLASSES = {
+export const BUTTON_TYPE_CLASSES = {
+  base: 'base',                 // a black button with white hover
   google: 'google-sign-in',     // a blue botton class
   inverted: 'inverted',         // a white button with black hover
 }
 
+const getButton = (buttonType = BUTTON_TYPE_CLASSES.base) => (
+  {
+    [BUTTON_TYPE_CLASSES.base]: BaseButton,
+    [BUTTON_TYPE_CLASSES.google]: GoogleSignInButton,
+    [BUTTON_TYPE_CLASSES.inverted]: InvertedButton,
+  }[buttonType]
+)
+
 const Button = ({ children, buttonType, ...otherProps }) => {
+  const CustomButton = getButton(buttonType)
   return (
-    <button 
-      className={`button-container ${BUTTON_TYPE_CLASSES[buttonType]}`}
-      {...otherProps}
-    >
+    <CustomButton {...otherProps} >
       {children}
-    </button>
+    </CustomButton>
   )
 }
 

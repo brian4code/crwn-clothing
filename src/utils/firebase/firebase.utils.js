@@ -10,7 +10,14 @@ import {
   onAuthStateChanged
 } from 'firebase/auth'
 import {
-  getFirestore, doc, getDoc, setDoc,
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  collection, 
+  writeBatch, 
+  query, 
+  getDocs
 } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
@@ -39,6 +46,64 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
 
 export const db = getFirestore()
+
+// use this one-off function to import initial data to firestore 
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey)
+  
+  // to write a successful transaction (that contains multiple write to the db)
+  const batch = writeBatch()
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase())
+    batch.set(docRef, object)
+  })
+
+  await batch.commit()
+  console.log('done')
+}
+
+
+// Sample category object in firestore
+/*
+{
+  hats: {
+    title: 'Hats',
+    items: [
+      {
+        id: 1,
+        name: 'test',
+        imageUrl: 'test.com',
+        price: 10
+      },
+      {}
+    ]
+  },
+  sneakers: {
+    title: 'Sneakers',
+    items: [
+      {},
+      {}
+    ]
+  }
+}
+
+*/
+
+// retrieve category mapping from firestore and convert to an object
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories')
+  const q = query(collectionRef)
+  
+  const querySnapshot = await getDocs(q)
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const {title, items} = docSnapshot.data()
+    acc[title.toLowerCase()] = items
+    return acc
+  }, {})
+
+  return categoryMap
+}
 
 // Get firebase authentication for user,
 // then write user doc into collection in firestore 

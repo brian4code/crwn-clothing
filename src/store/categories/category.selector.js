@@ -30,3 +30,9 @@ export const selectCategoriesMap = createSelector(
 ) 
 
   // a new categoriesMap object is created, thus causing re-render
+
+export const selectCategoriesIsLoading = createSelector(
+  [selectCategoryReducer],
+  (categoriesSlice) => categoriesSlice.isLoading
+)
+

@@ -1,6 +1,9 @@
 import { compose, createStore, applyMiddleware } from 'redux'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 // library to print log in console before / after state change
 import logger from 'redux-logger'
+import thunk from 'redux-thunk'
 
 import { rootReducer } from './root-reducer'
 
@@ -28,9 +31,20 @@ const loggerMiddleware = (store) => (next) => (action) => {
   console.log('next state: ', store.getState())
 }
 
+// redux-persist to keep state in local storage for later retrieve
+const persistConfig = {
+  key: 'root',
+  storage,
+  // blacklist: ['user'],    // do not persist user state in local storage
+  whitelist: ['cart'],    // only persist cart state 
+}
 
-const middleWares = [logger]
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+const middleWares = [process.env.NODE_ENV !== 'production' && logger, thunk]
 
 const composedEnhancers = compose(applyMiddleware(...middleWares))
 
-export const store = createStore(rootReducer, undefined, composedEnhancers)
+export const store = createStore(persistedReducer, undefined, composedEnhancers)
+
+export const persistor = persistStore(store)
